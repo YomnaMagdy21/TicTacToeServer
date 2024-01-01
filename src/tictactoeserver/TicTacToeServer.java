@@ -22,6 +22,8 @@ public class TicTacToeServer extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         
         Scene scene = new Scene(root);
+        String css=this.getClass().getResource("pieStyle.css").toExternalForm();
+        scene.getStylesheets().add(css);
         
         stage.setScene(scene);
         stage.show();
