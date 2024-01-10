@@ -10,10 +10,11 @@ package dto;
  * @author HP
  */
 public class DTO {
+
     private String username;
-    private String password ; 
+    private String password;
     private int score;
-    private  String status ; 
+    private String status;
 
     public DTO(String username, String password, int score, String status) {
         this.username = username;
@@ -53,7 +54,13 @@ public class DTO {
     public void setStatus(String status) {
         this.status = status;
     }
-    
-    
-    
+
+public String toString() {
+    return "DTO{" +
+            "username='" + username + '\'' +
+            ", password='" + password + '\'' +
+            ", score=" + score +
+            ", status='" + status + '\'' +
+            '}';
+}
 }

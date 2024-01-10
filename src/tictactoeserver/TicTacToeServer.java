@@ -5,6 +5,7 @@
  */
 package tictactoeserver;
 
+import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,15 +17,15 @@ import javafx.stage.Stage;
  * @author HP
  */
 public class TicTacToeServer extends Application {
-    
+
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
+
         Scene scene = new Scene(root);
-        String css=this.getClass().getResource("pieStyle.css").toExternalForm();
+        String css = this.getClass().getResource("pieStyle.css").toExternalForm();
         scene.getStylesheets().add(css);
-        
+
         stage.setScene(scene);
         stage.show();
     }
@@ -32,8 +33,10 @@ public class TicTacToeServer extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        launch(args);
+    public static void main(String[] args) throws IOException {
+     //  launch(args);
+      //  new Server();
+
     }
-    
+
 }
