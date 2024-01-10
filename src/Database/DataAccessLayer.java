@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import org.apache.derby.jdbc.ClientDriver ;
 import dto.Player;
 import dto.PlayerDTO;
-import DTO.PlayerDTO;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -41,7 +40,7 @@ public class DataAccessLayer {
         result  = s1.executeUpdate();
         s1.close();
         con.close();
-        return result; 
+        return result; } 
     public static boolean checkIfPlayerExist(PlayerDTO player) throws SQLException{
         boolean exist;
         DriverManager.registerDriver(new ClientDriver());
@@ -54,6 +53,8 @@ public class DataAccessLayer {
         }else{
             exist=false;
         }
+        prepareStatement.close();
+        connection.close();
         return exist;
     }
     
@@ -65,9 +66,11 @@ public class DataAccessLayer {
         PreparedStatement prepareStatement = connection.prepareStatement("UPDATE Player SET STATUS=online WHERE USERNAME=?");
         prepareStatement.setString(1, player.getUsername());
         result = prepareStatement.executeUpdate();
+        prepareStatement.close();
+        connection.close();
         return result;
     }
-}
+
     public static int updateScore(String username, int score) throws SQLException{
         int result=0;
           DriverManager.registerDriver(new ClientDriver());
@@ -109,4 +112,49 @@ public class DataAccessLayer {
        }
        return players;
    } 
+   public static int onlinePlayersNumber() throws SQLException{
+        int onlineNumbers=0;
+        DriverManager.registerDriver(new ClientDriver());
+        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe","root","root");
+        PreparedStatement prepareStatement = connection.prepareStatement("SELECT * FROM Player WHERE STATUS='online'" , ResultSet.TYPE_SCROLL_SENSITIVE , ResultSet.CONCUR_READ_ONLY);
+        ResultSet result = prepareStatement.executeQuery();
+        result.beforeFirst();
+        while(result.next()){
+            onlineNumbers++;
+        }
+        prepareStatement.close();
+        connection.close();
+        return onlineNumbers;
+    }
+    public static int offlinePlayersNumber() throws SQLException{
+        int offlineNumbers=0;
+        DriverManager.registerDriver(new ClientDriver());
+        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe","root","root");
+        PreparedStatement prepareStatement = connection.prepareStatement("SELECT * FROM Player WHERE STATUS='offline'" , ResultSet.TYPE_SCROLL_SENSITIVE , ResultSet.CONCUR_READ_ONLY);
+        ResultSet result = prepareStatement.executeQuery();
+        result.beforeFirst();
+        while(result.next()){
+            offlineNumbers++;
+        }
+        prepareStatement.close();
+        connection.close();
+        return offlineNumbers;
+    }
+    public static boolean logout(PlayerDTO player) throws SQLException{
+        boolean exit;
+        int result;
+        DriverManager.registerDriver(new ClientDriver());
+        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe","root","root");
+        PreparedStatement prepareStatement = connection.prepareStatement("UPDATE Player SET STATUS='offline' WHERE USERNAME=?");
+        prepareStatement.setString(1, player.getUsername());
+        result = prepareStatement.executeUpdate();
+        if(result==0){
+            exit=false;
+        }else{
+            exit=true;
+        }
+        prepareStatement.close();
+        connection.close();
+        return exit;
+    }
 }
