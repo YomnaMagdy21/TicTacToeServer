@@ -41,8 +41,9 @@ public class DataAccessLayer {
         result = s1.executeUpdate();
         s1.close();
         con.close();
-        return result;
-    }
+        return result; 
+    } 
+
 
     public static boolean checkIfPlayerExist(PlayerDTO player) throws SQLException {
         boolean exist;
@@ -56,6 +57,8 @@ public class DataAccessLayer {
         } else {
             exist = false;
         }
+        prepareStatement.close();
+        connection.close();
         return exist;
     }
 
@@ -66,9 +69,12 @@ public class DataAccessLayer {
         PreparedStatement prepareStatement = connection.prepareStatement("UPDATE Player SET STATUS=online WHERE USERNAME=?");
         prepareStatement.setString(1, player.getUsername());
         result = prepareStatement.executeUpdate();
+        prepareStatement.close();
+        connection.close();
         return result;
     }
 
+          
     public static int updateScore(String username, int score) throws SQLException {
         int result = 0;
         DriverManager.registerDriver(new ClientDriver());
@@ -147,17 +153,63 @@ public class DataAccessLayer {
                 Player cont = new Player(username, password, score, status);
                 players.add(cont);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
-            }
+       } catch (SQLException ex) {
+           Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
+       } finally{
+           try {
+               connection.close();
+           } catch (SQLException ex) {
+               Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
+           }
+       }
+       return players;
+   } 
+   public static int onlinePlayersNumber() throws SQLException{
+        int onlineNumbers=0;
+        DriverManager.registerDriver(new ClientDriver());
+        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe","root","root");
+        PreparedStatement prepareStatement = connection.prepareStatement("SELECT * FROM Player WHERE STATUS='online'" , ResultSet.TYPE_SCROLL_SENSITIVE , ResultSet.CONCUR_READ_ONLY);
+        ResultSet result = prepareStatement.executeQuery();
+        result.beforeFirst();
+        while(result.next()){
+            onlineNumbers++;
         }
-        return players;
+        prepareStatement.close();
+        connection.close();
+        return onlineNumbers;
     }
+    public static int offlinePlayersNumber() throws SQLException{
+        int offlineNumbers=0;
+        DriverManager.registerDriver(new ClientDriver());
+        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe","root","root");
+        PreparedStatement prepareStatement = connection.prepareStatement("SELECT * FROM Player WHERE STATUS='offline'" , ResultSet.TYPE_SCROLL_SENSITIVE , ResultSet.CONCUR_READ_ONLY);
+        ResultSet result = prepareStatement.executeQuery();
+        result.beforeFirst();
+        while(result.next()){
+            offlineNumbers++;
+        }
+        prepareStatement.close();
+        connection.close();
+        return offlineNumbers;
+    }
+    public static boolean logout(PlayerDTO player) throws SQLException{
+        boolean exit;
+        int result;
+        DriverManager.registerDriver(new ClientDriver());
+        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe","root","root");
+        PreparedStatement prepareStatement = connection.prepareStatement("UPDATE Player SET STATUS='offline' WHERE USERNAME=?");
+        prepareStatement.setString(1, player.getUsername());
+        result = prepareStatement.executeUpdate();
+        if(result==0){
+            exit=false;
+        }else{
+            exit=true;
+        }
+        prepareStatement.close();
+        connection.close();
+        return exit;
+    }
+
 
     public static void main(String[] args) {
 
