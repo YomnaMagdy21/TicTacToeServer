@@ -7,13 +7,21 @@ and open the template in the editor.
     Created on : Dec 29, 2023, 6:31:56 PM
     Author     : HP
 */
+@import url('https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap');
 
 
+.root{
+    -fx-background-color: #003F6C;
+    -fx-font-family: "Irish Grover","Franklin Gothic Medium",fantasy;/* Replace "Irish Grover" with your desired font family */
+ -fx-font-size: 25px;
+     
+}
 
 
 .chart-pie-label {
     -fx-fill: white; /* Change the text color to red */
     /* Other text properties */
+     -fx-font-size: 25px;
 }
 #startBtn{
 
