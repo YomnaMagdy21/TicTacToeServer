@@ -164,6 +164,35 @@ public class DataAccessLayer {
         return players;
     }
 
+    public static int onlinePlayersNumber() throws SQLException{
+        int onlineNumbers=0;
+        DriverManager.registerDriver(new ClientDriver());
+        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe","root","root");
+        PreparedStatement prepareStatement = connection.prepareStatement("SELECT * FROM Player WHERE STATUS='online'" , ResultSet.TYPE_SCROLL_SENSITIVE , ResultSet.CONCUR_READ_ONLY);
+        ResultSet result = prepareStatement.executeQuery();
+        result.beforeFirst();
+        while(result.next()){
+            onlineNumbers++;
+        }
+        prepareStatement.close();
+        connection.close();
+        return onlineNumbers;
+    }
+    public static int offlinePlayersNumber() throws SQLException{
+        int offlineNumbers=0;
+        DriverManager.registerDriver(new ClientDriver());
+        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe","root","root");
+        PreparedStatement prepareStatement = connection.prepareStatement("SELECT * FROM Player WHERE STATUS='offline'" , ResultSet.TYPE_SCROLL_SENSITIVE , ResultSet.CONCUR_READ_ONLY);
+        ResultSet result = prepareStatement.executeQuery();
+        result.beforeFirst();
+        while(result.next()){
+            offlineNumbers++;
+        }
+        prepareStatement.close();
+        connection.close();
+        return offlineNumbers;
+    }
+    
     public static void main(String[] args) {
 
     }

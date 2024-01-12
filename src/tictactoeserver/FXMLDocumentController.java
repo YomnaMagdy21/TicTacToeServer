@@ -5,8 +5,11 @@
  */
 package tictactoeserver;
 
+import static Database.DataAccessLayer.offlinePlayersNumber;
+import static Database.DataAccessLayer.onlinePlayersNumber;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,14 +56,21 @@ public class FXMLDocumentController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        ObservableList<PieChart.Data> pChartData=
-            FXCollections.observableArrayList(
-            new PieChart.Data("offline",50),
-            new PieChart.Data("ongaming",30),
-            new PieChart.Data("online",50));
+        try {
+            // TODO
+            int onlineNumber = onlinePlayersNumber();
+            int offlineNumber = offlinePlayersNumber();
+            ObservableList<PieChart.Data> pChartData=
+                    FXCollections.observableArrayList(
+                            new PieChart.Data("offline",offlineNumber),
+                            new PieChart.Data("online",onlineNumber));
             pieChart.setData(pChartData);
-            pieChart.setStartAngle(90);         
+            pieChart.setStartAngle(90); 
+            System.out.println("onlineNumber : "+ onlineNumber);
+            System.out.println("offlineNumber : "+ offlineNumber);
+        } catch (SQLException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     } 
     
     @FXML
@@ -74,6 +84,7 @@ public class FXMLDocumentController implements Initializable {
                 System.out.println("Server is Running Now");
                 txtServer.setText("Server is Running Now");
                 Platform.runLater(() -> startBtn.setText("Stop"));
+                Platform.runLater(() -> startBtn.setStyle("-fx-background-color: red;"));
             }).start();
         } else {
             new Thread(() -> {
@@ -81,6 +92,7 @@ public class FXMLDocumentController implements Initializable {
                 Platform.runLater(() -> {
                     txtServer.setText("Server is Stopped Now");
                     startBtn.setText("Start");
+                    startBtn.setStyle("-fx-background-color: yellow; -fx-text-fill: black;");
                 });
             }).start();
         }
