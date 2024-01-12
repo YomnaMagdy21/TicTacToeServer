@@ -13,13 +13,12 @@
 
 <AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" stylesheets="@pieStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tictactoeserver.FXMLDocumentController">
    <children>
-      <Text id="txtServer" fx:id="txtServer" layoutX="340.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SERVER">
+      <Text id="txtServer" fx:id="txtServer" layoutX="332.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SERVER">
          <font>
             <Font size="36.0" />
          </font>
       </Text>
-      <Button fx:id="startBtn" layoutX="243.0" layoutY="133.0" mnemonicParsing="false" onAction="#startServer" text="Start" />
-      <Button fx:id="stopBtn" layoutX="456.0" layoutY="133.0" mnemonicParsing="false" onAction="#stopServer" text="Stop" />
+      <Button fx:id="startBtn" layoutX="290.0" layoutY="115.0" mnemonicParsing="false" onAction="#startServer" prefHeight="96.0" prefWidth="204.0" text="Start" />
       <PieChart fx:id="pieChart" layoutX="3.0" layoutY="240.0" legendSide="RIGHT" prefHeight="357.0" prefWidth="778.0" />
    </children>
 </AnchorPane>

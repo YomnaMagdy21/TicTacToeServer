@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
@@ -64,7 +65,7 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void startServer(ActionEvent event){
-        if(server==null || !server.serverRunning()){
+        if (server == null || !server.serverRunning()) {
             if (server == null) {
                 server = new Server();
             }
@@ -72,22 +73,29 @@ public class FXMLDocumentController implements Initializable {
                 server.startServer();
                 System.out.println("Server is Running Now");
                 txtServer.setText("Server is Running Now");
+                Platform.runLater(() -> startBtn.setText("Stop"));
             }).start();
-        }else {
-            txtServer.setText("Server is already running");
+        } else {
+            new Thread(() -> {
+                server.stopServer();
+                Platform.runLater(() -> {
+                    txtServer.setText("Server is Stopped Now");
+                    startBtn.setText("Start");
+                });
+            }).start();
         }
     }
     
-    @FXML
-    private void stopServer(ActionEvent event){
-        if(server!=null && server.serverRunning()){
-            server.stopServer();
-            txtServer.setText("Server is Stopped Now");
-        }else {
-            txtServer.setText("Server is not running");
-            System.out.println("server already not running");
-        }
-    }
+//    @FXML
+//    private void stopServer(ActionEvent event){
+//        if(server!=null && server.serverRunning()){
+//            server.stopServer();
+//            txtServer.setText("Server is Stopped Now");
+//        }else {
+//            txtServer.setText("Server is not running");
+//            System.out.println("server already not running");
+//        }
+//    }
     public Server getServer() {
         return server;
     }
