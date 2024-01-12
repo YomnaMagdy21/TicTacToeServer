@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DTO;
+package Database;
 
 /**
  *
- * @author HP
+ * @author DELL
  */
 public class PlayerDTO {
     private String username;
@@ -53,7 +53,5 @@ public class PlayerDTO {
     public void setStatus(String status) {
         this.status = status;
     }
-    
-    
     
 }
