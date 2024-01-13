@@ -33,80 +33,99 @@ public class Server {
     Socket clientSocket;
     DataInputStream ear;
     PrintStream mouth;
+
+    private boolean serverRun = false;
+
     private Map<Socket, String> clientIPs = new HashMap<>();
 
-    public static void main(String[] args) throws IOException {
-        new Server();
-    }
+    public void startServer() {
+        new Thread(() -> {
+            try {
+                server = new ServerSocket(5005);
+                serverRun = true;
+                System.out.println("Server is listening on port 5005");
 
-    public Server() throws IOException {
-        try {
-            server = new ServerSocket(5005);
-            System.out.println("Server is listening on port 5005");
-            // ear = new DataInputStream(server.getInputStream());
+                while (true) {
 
-            while (true) {
-//
-                clientSocket = server.accept();//number of clients return socket then create chat handler
-                System.out.println("Server has accepted a new client");
+                    while (serverRun) {
+                        clientSocket = server.accept();
+                        ear = new DataInputStream(clientSocket.getInputStream());
+                        mouth = new PrintStream(clientSocket.getOutputStream());
+                        String clientIP = ear.readLine();
+                        clientIPs.put(clientSocket, clientIP);
+                        System.out.println("Server has accepted a new client with IP: " + clientIP);
+                        System.out.println("Server has accepted a new client");
+                        InputStream inputStream = clientSocket.getInputStream();
+                        OutputStream outputStream = clientSocket.getOutputStream();
+                        byte[] buffer = new byte[1024];
+                        int bytesRead = inputStream.read(buffer);
+                        String receivedMessage = new String(buffer, 0, bytesRead);
+                        System.out.println("Received message from client: " + receivedMessage);
+                        StringTokenizer tokenizer = new StringTokenizer(receivedMessage);
+                        String command = tokenizer.nextToken(); // "login"
+                        String enteredUsername = tokenizer.nextToken();
+                        String enteredPassword = tokenizer.nextToken();
+                        System.out.println("Command: " + command);
+                        System.out.println("Entered Password: " + enteredUsername);
+                        System.out.println("Entered Username: " + enteredPassword);
+                        switch (command) {
+                            case "login":
+                                DataAccessLayer.isValidUser(enteredUsername, enteredPassword);
+                                DataAccessLayer.updateStatusnewtoOnline(enteredUsername);
+                                System.out.println("LOGIN");
+                                String successMessage = "login succeed";
+                                outputStream.write(successMessage.getBytes());
+                                outputStream.flush();
 
-//                ear = new DataInputStream(clientSocket.getInputStream());
-//                mouth = new PrintStream(clientSocket.getOutputStream());
-//                //  String clientIP = clientSocket.getInetAddress().getHostAddress();
-//                String clientIP = ear.readLine();
-//                clientIPs.put(clientSocket, clientIP);
-//                System.out.println("Server has accepted a new client with IP: " + clientIP);
-//
-//                System.out.println("Server has accepted a new client");
-                InputStream inputStream = clientSocket.getInputStream();
-                OutputStream outputStream = clientSocket.getOutputStream();
+                                break;
+                            case "signup":
+                                DataAccessLayer.addContact(new DTO(enteredUsername, enteredPassword, 1, "offline"));
+                                String successMessagesignup = "signup succeed";
+                                outputStream.write(successMessagesignup.getBytes());
+                                outputStream.flush();
+                                System.out.println("SIGNUP");
+                                break;
+                            case "LOGOUT":
+                                //DataAccessLayer.logout(new DTO(enteredUsername, enteredPassword, 1, "offline"));
+                                DataAccessLayer.updateStatusnewtoOffline(enteredUsername);
+                                System.out.println("LOGOUT");
+                                String successMessageLOGOUT = "LOGOUT succeed";
+                                outputStream.write(successMessageLOGOUT.getBytes());
+                                outputStream.flush();
+                                System.out.println("LOGOUT");
+                                break;
 
-                byte[] buffer = new byte[1024];
-                int bytesRead = inputStream.read(buffer);
-                String receivedMessage = new String(buffer, 0, bytesRead);
-                System.out.println("Received message from client: " + receivedMessage);
-                StringTokenizer tokenizer = new StringTokenizer(receivedMessage);
-                String command = tokenizer.nextToken(); // "login"
-                String enteredUsername = tokenizer.nextToken();
-                String enteredPassword = tokenizer.nextToken();
-                System.out.println("Command: " + command);
-                System.out.println("Entered Password: " + enteredUsername);
-                System.out.println("Entered Username: " + enteredPassword);
-                switch (command) {
-                    case "login":
-                        DataAccessLayer.isValidUser(enteredUsername, enteredPassword);
-                        DataAccessLayer.updateStatusnewtoOnline(enteredUsername);
-                        System.out.println("LOGIN");
-                        String successMessage = "login succeed";
-                        outputStream.write(successMessage.getBytes());
-                        outputStream.flush();
-
-                        break;
-                    case "signup":
-                        DataAccessLayer.addContact(new DTO(enteredUsername, enteredPassword, 1, "offline"));
-                        String successMessagesignup = "signup succeed";
-                        outputStream.write(successMessagesignup.getBytes());
-                        outputStream.flush();
-                        System.out.println("SIGNUP");
-                        break;
-                    case "LOGOUT":
-                        //DataAccessLayer.logout(new DTO(enteredUsername, enteredPassword, 1, "offline"));
-                        DataAccessLayer.updateStatusnewtoOffline(enteredUsername);
-                        System.out.println("LOGOUT");
-                        String successMessageLOGOUT = "LOGOUT succeed";
-                        outputStream.write(successMessageLOGOUT.getBytes());
-                        outputStream.flush();
-                        System.out.println("LOGOUT");
-                        break;
+                        }
+                    }
 
                 }
-                new ChatHandler(clientSocket);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } catch (SQLException ex) {
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+
+            }
+
+        }).start();
+    }
+
+    public void stopServer() {
+        try {
+            if (server != null && !server.isClosed()) {
+                server.close();
+                serverRun = false;
+                System.out.println("Server Stopped now !!");
             }
         } catch (IOException ex) {
             ex.printStackTrace();
-        } catch (SQLException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("thers is a problem on server");
+
         }
+
+    }
+
+    public boolean serverRunning() {
+        return serverRun;
     }
 
 }

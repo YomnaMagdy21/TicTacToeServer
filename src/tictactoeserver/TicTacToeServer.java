@@ -17,10 +17,19 @@ import javafx.stage.Stage;
  * @author HP
  */
 public class TicTacToeServer extends Application {
+    private Server server;
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLDocument.fxml"));
+//        Parent root = loader.load();
+//        
+//        FXMLDocumentController controller = loader.getController();
+          Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+//        controller.startBtn.setOnAction(event -> startServer());
+//        controller.stopBtn.setOnAction(event -> stopServer());
+            //server = controller.getServer();
+
 
         Scene scene = new Scene(root);
         String css = this.getClass().getResource("pieStyle.css").toExternalForm();
@@ -30,13 +39,34 @@ public class TicTacToeServer extends Application {
         stage.show();
     }
 
+
     /**
      * @param args the command line arguments
      */
+   
+
+
+//    private void startServer() {
+//        if (server == null || !server.serverRunning()) {
+//            try {
+//                server = new Server();
+//                System.out.println("start server method!!");
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+//    private void stopServer() {
+//        if (server != null && server.serverRunning()) {
+//            server.stopServer();
+//            System.out.println("stop server method!!");
+//        }
+//    }
+    
     public static void main(String[] args) throws IOException {
-     //  launch(args);
-    //   new Server();
-
+       launch(args);
+        //new Server();
     }
-
 }
+
+
