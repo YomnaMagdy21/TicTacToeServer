@@ -75,6 +75,7 @@ public class Server {
                 switch (command) {
                     case "login":
                         DataAccessLayer.isValidUser(enteredUsername, enteredPassword);
+                        DataAccessLayer.updateStatusnewtoOnline(enteredUsername);
                         System.out.println("LOGIN");
                         String successMessage = "login succeed";
                         outputStream.write(successMessage.getBytes());
@@ -87,6 +88,15 @@ public class Server {
                         outputStream.write(successMessagesignup.getBytes());
                         outputStream.flush();
                         System.out.println("SIGNUP");
+                        break;
+                    case "LOGOUT":
+                        //DataAccessLayer.logout(new DTO(enteredUsername, enteredPassword, 1, "offline"));
+                        DataAccessLayer.updateStatusnewtoOffline(enteredUsername);
+                        System.out.println("LOGOUT");
+                        String successMessageLOGOUT = "LOGOUT succeed";
+                        outputStream.write(successMessageLOGOUT.getBytes());
+                        outputStream.flush();
+                        System.out.println("LOGOUT");
                         break;
 
                 }

@@ -63,9 +63,33 @@ public class DataAccessLayer {
     public static int updateStatus(DTO player) throws SQLException {
         int result;
         DriverManager.registerDriver(new ClientDriver());
-        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "root", "root");
+        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "habiba", "habiba");
         PreparedStatement prepareStatement = connection.prepareStatement("UPDATE Player SET STATUS=online WHERE USERNAME=?");
         prepareStatement.setString(1, player.getUsername());
+        result = prepareStatement.executeUpdate();
+        prepareStatement.close();
+        connection.close();
+        return result;
+    }
+
+    public static int updateStatusnewtoOnline(String username) throws SQLException {
+        int result;
+        DriverManager.registerDriver(new ClientDriver());
+        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "habiba", "habiba");
+        PreparedStatement prepareStatement = connection.prepareStatement("UPDATE Player SET STATUS='online' WHERE USERNAME=?");
+        prepareStatement.setString(1, username);
+        result = prepareStatement.executeUpdate();
+        prepareStatement.close();
+        connection.close();
+        return result;
+    }
+
+    public static int updateStatusnewtoOffline(String username) throws SQLException {
+        int result;
+        DriverManager.registerDriver(new ClientDriver());
+        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "habiba", "habiba");
+        PreparedStatement prepareStatement = connection.prepareStatement("UPDATE Player SET STATUS='offline' WHERE USERNAME=?");
+        prepareStatement.setString(1, username);
         result = prepareStatement.executeUpdate();
         prepareStatement.close();
         connection.close();
@@ -75,7 +99,7 @@ public class DataAccessLayer {
     public static int updateScore(String username, int score) throws SQLException {
         int result = 0;
         DriverManager.registerDriver(new ClientDriver());
-        Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "root", "root");
+        Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "habiba", "habiba");
         PreparedStatement ps = con.prepareStatement("UPDATE Player SET Score = ? WHERE Username = ?");
         ps.setInt(1, score);
         ps.setString(2, username);
@@ -196,7 +220,7 @@ public class DataAccessLayer {
         boolean exit;
         int result;
         DriverManager.registerDriver(new ClientDriver());
-        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "root", "root");
+        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "habiba", "habiba");
         PreparedStatement prepareStatement = connection.prepareStatement("UPDATE Player SET STATUS='offline' WHERE USERNAME=?");
         prepareStatement.setString(1, player.getUsername());
         result = prepareStatement.executeUpdate();
