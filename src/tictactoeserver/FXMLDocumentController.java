@@ -44,6 +44,7 @@ public class FXMLDocumentController implements Initializable {
              pieChart.setData(pChartData);
              pieChart.setStartAngle(90);
          
-    }    
+    } 
+   
     
 }

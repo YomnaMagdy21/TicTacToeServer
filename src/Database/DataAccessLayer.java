@@ -5,13 +5,13 @@
  */
 package Database;
 
-import dto.DTO;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import dto.Player;
-import dto.PlayerDTO;
+
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.derby.jdbc.ClientDriver;
+import tictactoeserver.ClientConnection;
 
 /**
  *
@@ -29,10 +30,10 @@ import org.apache.derby.jdbc.ClientDriver;
  */
 public class DataAccessLayer {
 
-    public static int addContact(DTO contact) throws SQLException {
+    public static int addContact(Player contact) throws SQLException {
         int result = 0;
         DriverManager.registerDriver(new ClientDriver());
-        Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "habiba", "habiba");
+        Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "root", "root");
         PreparedStatement s1 = con.prepareStatement("INSERT INTO Player (USERNAME, PASSWORD, SCORE, STATUS) VALUES ( ? , ? , ? , ? )");
         s1.setString(1, contact.getUsername());
         s1.setString(2, contact.getPassword());
@@ -44,7 +45,7 @@ public class DataAccessLayer {
         return result;
     }
 
-    public static boolean checkIfPlayerExist(PlayerDTO player) throws SQLException {
+    public static boolean checkIfPlayerExist(Player player) throws SQLException {
         boolean exist;
         DriverManager.registerDriver(new ClientDriver());
         Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "root", "root");
@@ -59,7 +60,7 @@ public class DataAccessLayer {
         return exist;
     }
 
-    public static int updateStatus(PlayerDTO player) throws SQLException {
+    public static int updateStatus(Player player) throws SQLException {
         int result;
         DriverManager.registerDriver(new ClientDriver());
         Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "root", "root");
@@ -87,7 +88,7 @@ public class DataAccessLayer {
         DriverManager.registerDriver(new ClientDriver());
         // Connection connection = null;
         try (
-                Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "habiba", "habiba");
+                Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "root", "root");
                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM PLAYER WHERE USERNAME = ? AND PASSWORD = ?")) {
             statement.setString(1, username);
             statement.setString(2, password);
@@ -101,11 +102,11 @@ public class DataAccessLayer {
         }
     }
 
-    public static ArrayList<DTO> getOnlineUsers() throws SQLException {
-        ArrayList<DTO> onlineUsers = new ArrayList<>();
+    public static ArrayList<Player> getOnlineUsers() throws SQLException {
+        ArrayList<Player> onlineUsers = new ArrayList<>();
 
         // Establish a database connection
-        try (Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "habiba", "habiba")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "root", "root")) {
             // Execute SQL query to get online users
             String sql = "SELECT * FROM PLAYER WHERE STATUS = 'online'";
             try (PreparedStatement statement = connection.prepareStatement(sql);
@@ -118,7 +119,7 @@ public class DataAccessLayer {
                     int score = resultSet.getInt("score");
                     String status = resultSet.getString("status");
 
-                    DTO user = new DTO(username, password, score, status);
+                    Player user = new Player(username, password, score, status);
                     onlineUsers.add(user);
                 }
             }

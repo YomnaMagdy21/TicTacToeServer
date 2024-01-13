@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dto;
+package Database;
 
 /**
  *
@@ -21,6 +21,11 @@ public class Player {
         this.password = password;
         this.score = score;
         this.status = status;
+    }
+     public Player(String username, String password) {
+        this.username = username;
+        this.password = password;
+       
     }
     
     public String getUsername() {
