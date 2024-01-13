@@ -10,8 +10,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import dto.Player;
-import dto.PlayerDTO;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -44,7 +43,7 @@ public class DataAccessLayer {
         return result;
     }
 
-    public static boolean checkIfPlayerExist(PlayerDTO player) throws SQLException {
+    public static boolean checkIfPlayerExist(DTO player) throws SQLException {
         boolean exist;
         DriverManager.registerDriver(new ClientDriver());
         Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "root", "root");
@@ -59,7 +58,7 @@ public class DataAccessLayer {
         return exist;
     }
 
-    public static int updateStatus(PlayerDTO player) throws SQLException {
+    public static int updateStatus(DTO player) throws SQLException {
         int result;
         DriverManager.registerDriver(new ClientDriver());
         Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "root", "root");
@@ -131,8 +130,8 @@ public class DataAccessLayer {
         return onlineUsers;
     }
 
-    public List<Player> getAll() {
-        List<Player> players = new ArrayList<Player>();
+    public List<DTO> getAll() {
+        List<DTO> players = new ArrayList<DTO>();
         Connection connection = null;
         try {
             DriverManager.registerDriver(new ClientDriver());
@@ -144,7 +143,7 @@ public class DataAccessLayer {
                 String password = rst.getString(2);
                 int score = rst.getInt(3);
                 String status = rst.getString(4);
-                Player cont = new Player(username, password, score, status);
+                DTO cont = new DTO(username, password, score, status);
                 players.add(cont);
             }
         } catch (SQLException ex) {
