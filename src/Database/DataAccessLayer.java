@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Database;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -29,17 +30,18 @@ public class DataAccessLayer {
     public static int addContact(DTO contact) throws SQLException {
         int result = 0;
         DriverManager.registerDriver(new ClientDriver());
-        Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "habiba", "habiba");
-        PreparedStatement s1 = con.prepareStatement("INSERT INTO Player (USERNAME, PASSWORD, SCORE, STATUS) VALUES ( ? , ? , ? , ? )");
+        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "root", "root");
+        PreparedStatement s1 = connection.prepareStatement("INSERT INTO Player (USERNAME, PASSWORD, SCORE, STATUS) VALUES ( ? , ? , ? , ? )");
         s1.setString(1, contact.getUsername());
         s1.setString(2, contact.getPassword());
         s1.setString(3, contact.getStatus());
         s1.setInt(4, contact.getScore());
         result = s1.executeUpdate();
         s1.close();
-        con.close();
-        return result; 
-    } 
+        connection.close();
+        return result;
+    }
+
 
 
     public static boolean checkIfPlayerExist(DTO player) throws SQLException {
@@ -59,11 +61,12 @@ public class DataAccessLayer {
         return exist;
     }
 
+
     public static int updateStatus(DTO player) throws SQLException {
         int result;
         DriverManager.registerDriver(new ClientDriver());
         Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "root", "root");
-        PreparedStatement prepareStatement = connection.prepareStatement("UPDATE Player SET STATUS=online WHERE USERNAME=?");
+        PreparedStatement prepareStatement = connection.prepareStatement("UPDATE Player SET STATUS='online' WHERE USERNAME=?");
         prepareStatement.setString(1, player.getUsername());
         result = prepareStatement.executeUpdate();
         prepareStatement.close();
@@ -71,17 +74,16 @@ public class DataAccessLayer {
         return result;
     }
 
-          
     public static int updateScore(String username, int score) throws SQLException {
         int result = 0;
         DriverManager.registerDriver(new ClientDriver());
-        Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "root", "root");
-        PreparedStatement ps = con.prepareStatement("UPDATE Player SET Score = ? WHERE Username = ?");
+        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "root", "root");
+        PreparedStatement ps = connection.prepareStatement("UPDATE Player SET Score = ? WHERE Username = ?");
         ps.setInt(1, score);
         ps.setString(2, username);
         result = ps.executeUpdate();
         ps.close();
-        con.close();
+        connection.close();
 
         return result;
     }
@@ -90,7 +92,7 @@ public class DataAccessLayer {
         DriverManager.registerDriver(new ClientDriver());
         // Connection connection = null;
         try (
-                Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "habiba", "habiba");
+                Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "root", "root");
                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM PLAYER WHERE USERNAME = ? AND PASSWORD = ?")) {
             statement.setString(1, username);
             statement.setString(2, password);
@@ -108,7 +110,10 @@ public class DataAccessLayer {
         ArrayList<DTO> onlineUsers = new ArrayList<>();
 
         // Establish a database connection
-        try (Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "habiba", "habiba")) {
+        try (
+            Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "root", "root");
+                ) 
+        {
             // Execute SQL query to get online users
             String sql = "SELECT * FROM PLAYER WHERE STATUS = 'online'";
             try (PreparedStatement statement = connection.prepareStatement(sql);
@@ -150,18 +155,19 @@ public class DataAccessLayer {
                 DTO cont = new DTO(username, password, score, status);
                 players.add(cont);
             }
-       } catch (SQLException ex) {
-           Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
-       } finally{
-           try {
-               connection.close();
-           } catch (SQLException ex) {
-               Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
-           }
-       }
-       return players;
-   } 
-   public static int onlinePlayersNumber() throws SQLException{
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return players;
+    }
+
+    public static int onlinePlayersNumber() throws SQLException{
         int onlineNumbers=0;
         DriverManager.registerDriver(new ClientDriver());
         Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe","root","root");
@@ -189,6 +195,7 @@ public class DataAccessLayer {
         connection.close();
         return offlineNumbers;
     }
+
     public static boolean logout(DTO player) throws SQLException{
         boolean exit;
         int result;
