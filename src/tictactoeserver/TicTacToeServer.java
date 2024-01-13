@@ -40,6 +40,12 @@ public class TicTacToeServer extends Application {
     }
 
 
+    /**
+     * @param args the command line arguments
+     */
+   
+
+
 //    private void startServer() {
 //        if (server == null || !server.serverRunning()) {
 //            try {
@@ -61,5 +67,6 @@ public class TicTacToeServer extends Application {
        launch(args);
         //new Server();
     }
-
 }
+
+
