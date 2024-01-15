@@ -127,8 +127,8 @@ public class DataAccessLayer {
         }
     }
 
-    public static ArrayList<DTO> getOnlineUsers() throws SQLException {
-        ArrayList<DTO> onlineUsers = new ArrayList<>();
+    public static ArrayList<String> getOnlineUsers() throws SQLException {
+        ArrayList onlineUsers = new ArrayList<>();
 
         // Establish a database connection
         try (
@@ -142,10 +142,10 @@ public class DataAccessLayer {
                 while (resultSet.next()) {
                     String username = resultSet.getString("username");
                     String password = resultSet.getString("password");
-                    int score = resultSet.getInt("score");
+                   // int score = resultSet.getInt("score");
                     String status = resultSet.getString("status");
 
-                    DTO user = new DTO(username, password, score, status);
+                    String user = username+ password + status;
                     onlineUsers.add(user);
                 }
             }
@@ -157,6 +157,14 @@ public class DataAccessLayer {
 
         return onlineUsers;
     }
+    
+    
+    
+    
+
+    
+    
+    
 
     public List<DTO> getAll() {
         List<DTO> players = new ArrayList<DTO>();

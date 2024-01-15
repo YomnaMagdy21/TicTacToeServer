@@ -9,6 +9,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.Vector;
 
 /**
  *
@@ -19,10 +20,13 @@ public class ClientHandler implements Runnable {
     private Server server;
     private DataInputStream ear;
     private PrintStream mouth;
-
-    public ClientHandler(Socket clientSocket, Server server) {
+    static Vector<ClientHandler> clients=new Vector<>();
+    String userString
+    public ClientHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
         this.server = server;
+        clients.add(this);
+        
         // Initialize input and output streams
     }
 

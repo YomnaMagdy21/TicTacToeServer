@@ -3,19 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/E:/ITI%209%20Months/Java%20Developement/Project%20Java(XO)/Project/TicTacToeServer/src/tictactoeserver/FXMLDocumentController.java</file>
-            <file>file:/E:/ITI%209%20Months/Java%20Developement/Project%20Java(XO)/Project/TicTacToeServer/src/Database/DataAccessLayer.java</file>
-            <file>file:/E:/ITI%209%20Months/Java%20Developement/Project%20Java(XO)/Project/TicTacToeServer/src/tictactoeserver/TicTacToeServer.java</file>
-            <file>file:/E:/ITI%209%20Months/Java%20Developement/Project%20Java(XO)/Project/TicTacToeServer/src/tictactoeserver/Server.java</file>
-=======
             <file>file:/H:/iti/JavaServer/TicTacToeServer/src/tictactoeserver/Server.java</file>
-<<<<<<< HEAD
-=======
-            <file>file:/H:/iti/JavaServer/TicTacToeServer/src/DTO/DTO.java</file>
-            <file>file:/H:/iti/JavaServer/TicTacToeServer/src/Database/DataAccessLayer.java</file>
->>>>>>> dev
->>>>>>> dev
+            <file>file:/H:/iti/JavaServer/TicTacToeServer/src/tictactoeserver/ClientHandler.java</file>
         </group>
     </open-files>
 </project-private>
