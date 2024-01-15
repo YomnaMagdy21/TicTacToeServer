@@ -135,7 +135,7 @@ class ChatHandler extends Thread {
     DataInputStream dis;
     PrintStream ps;
     static Vector<ChatHandler> clientsVector = new Vector<ChatHandler>();
-
+     private char[][] board = new char[3][3];
     public ChatHandler(Socket cs) throws IOException {
         try {
             dis = new DataInputStream(new DataInputStream(cs.getInputStream()));
@@ -154,6 +154,15 @@ class ChatHandler extends Thread {
                 for (ChatHandler ch : clientsVector) {
                     ch.ps.println(msg);
                 }
+                
+                 String move = dis.readLine();
+                if (move == null) {
+                    break;
+                }
+                sendMessageToAll(msg);
+               
+                // Broadcast the move to all clients
+                
             } catch (SocketException se) {
                 // Handle the SocketException, e.g., log it
                 System.err.println("Connection reset by client");
@@ -163,5 +172,14 @@ class ChatHandler extends Thread {
             }
 
         }
+        
+        
     }
+    private void sendMessageToAll(String msg) {
+        for (ChatHandler client : clientsVector) {
+            client.ps.println(msg);
+        }
+    }
+   
+
 }
