@@ -17,7 +17,7 @@ import javafx.stage.Stage;
  * @author HP
  */
 public class TicTacToeServer extends Application {
-    private Server server;
+  //  private Server server;
 
     @Override
     public void start(Stage stage) throws Exception {
