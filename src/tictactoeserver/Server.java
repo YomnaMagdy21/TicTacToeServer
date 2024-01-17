@@ -23,12 +23,13 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.*;
+import static tictactoeserver.ClientHandler.clients;
 
 /**
  *
  * @author HP
  */
-public class Server {
+public class Server extends Thread {
 
     ServerSocket server;
     Socket clientSocket;
@@ -37,170 +38,109 @@ public class Server {
 
     private boolean serverRun = false;
 
-    private Map<Socket, String> clientIPs = new HashMap<>();
-
-    public void startServer() {
-        new Thread(() -> {
-            try {
-                server = new ServerSocket(5005);
-                serverRun = true;
-                System.out.println("Server is listening on port 5005");
-                while (serverRun) {
-                    clientSocket = server.accept();
-                    new ClientHandler(clientSocket);
-                    System.out.println("Server has accepted a new client");
-                    InputStream inputStream = clientSocket.getInputStream();
-                    OutputStream outputStream = clientSocket.getOutputStream();
-                    handleClient(clientSocket, inputStream, outputStream);
-
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            } finally {
-                try {
-                    if (server != null && !server.isClosed()) {
-                        server.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                serverRun = false;
-                System.out.println("Server Stopped now !!");
-
-            }
-
-        }).start();
-    }
-
-    public void stopServer() {
+    public Server(){
         try {
-            if (server != null && !server.isClosed()) {
-                server.close();
-                serverRun = false;
-                System.out.println("Server Stopped now !!");
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            System.out.println("thers is a problem on server");
-
-        }
-
-    }
-
-    public boolean serverRunning() {
-        return serverRun;
-    }
-
-    private void handleClient(Socket clientSocket, InputStream inputStream, OutputStream outputStream) {
-        
-        try {
-            byte[] buffer = new byte[1024];
-            int bytesRead = inputStream.read(buffer);
-            String receivedMessage = new String(buffer, 0, bytesRead);
-            System.out.println("Received message from client: " + receivedMessage);
-
-            StringTokenizer tokenizer = new StringTokenizer(receivedMessage);
-            String command = tokenizer.nextToken();
-            String enteredUsername = tokenizer.nextToken();
-            String enteredPassword = tokenizer.nextToken();
-
-            switch (command) {
-                case "login":
-                    DataAccessLayer.isValidUser(enteredUsername, enteredPassword);
-                    DataAccessLayer.updateStatusnewtoOnline(enteredUsername);
-
-                    System.out.println("LOGIN");
-                    String successMessage = "login succeed";
-                    outputStream.write(successMessage.getBytes());
-
-                    ArrayList<String> onlinePlayers = DataAccessLayer.getOnlineUsers();
-                    String onlineUsersString = String.join(",", onlinePlayers);
-                    System.out.println(onlineUsersString);
-
-                    outputStream.write(onlineUsersString.getBytes());
-                    outputStream.flush();
-                    break;
-
-                case "signup":
-                    DataAccessLayer.addContact(new DTO(enteredUsername, enteredPassword, 1, "offline"));
-                    String successMessagesignup = "signup succeed";
-                    outputStream.write(successMessagesignup.getBytes());
-                    outputStream.flush();
-                    System.out.println("SIGNUP");
-                    break;
-
-                case "LOGOUT":
-                    DataAccessLayer.updateStatusnewtoOffline(enteredUsername);
-                    System.out.println("LOGOUT");
-                    String successMessageLOGOUT = "LOGOUT succeed";
-                    outputStream.write(successMessageLOGOUT.getBytes());
-                    outputStream.flush();
-                    System.out.println("LOGOUT");
-                    break;
-
-                default:
-                    System.out.println("Unknown command: " + command);
-                    break;
-            }
+            server = new ServerSocket(5005);
+            start();
+            System.out.println("Server is listening on port 5005");
+            
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+//    public void Server() {
+//
+//        try {
+//            server = new ServerSocket(5005);
+//            serverRun = true;
+//            System.out.println("Server is listening on port 5005");
+//            while (serverRun) {
+//                clientSocket = server.accept();
+//            //    new ClientHandler(clientSocket);
+////                ClientHandler C= new ClientHandler(clientSocket);
+////               C.handleClient(clientSocket);
+//
+//                this.start();
+//
+//            }
+//
+//        } catch (IOException ex) {
+//            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
 
-}
+//    public void startServer() {
+//        new Thread(() -> {
+//            try {
+//                server = new ServerSocket(5005);
+//                serverRun = true;
+//                System.out.println("Server is listening on port 5005");
+//                while (serverRun) {
+//                    clientSocket = server.accept();
+//                  //  new ClientHandler(clientSocket);
+//                    ClientHandler C = new ClientHandler(clientSocket);
+//                    C.handleClient(clientSocket);
+//
+//                    System.out.println("Server has accepted a new client");
+////                    InputStream inputStream = clientSocket.getInputStream();
+////                    OutputStream outputStream = clientSocket.getOutputStream();
+//                    // ClientHandler.handleClient(clientSocket);
+//                }
+//            } catch (IOException ex) {
+//                ex.printStackTrace();
+//            } finally {
+//                try {
+//                    if (server != null && !server.isClosed()) {
+//                        server.close();
+//                    }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                serverRun = false;
+//                System.out.println("Server Stopped now !!");
+//
+//            }
+//
+//        }).start();
+//    }
+//
+//    public void stopServer() {
+//        try {
+//            if (server != null && !server.isClosed()) {
+//                server.close();
+//                serverRun = false;
+//                System.out.println("Server Stopped now !!");
+//            }
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//            System.out.println("thers is a problem on server");
+//
+//        }
+//
+//    }
+//
+//    public boolean serverRunning() {
+//        return serverRun;
+//    }
 
-class ChatHandler extends Thread {
-
-    DataInputStream dis;
-    PrintStream ps;
-    static Vector<ChatHandler> clientsVector = new Vector<ChatHandler>();
-     private char[][] board = new char[3][3];
-    public ChatHandler(Socket cs) throws IOException {
-        try {
-            dis = new DataInputStream(new DataInputStream(cs.getInputStream()));
-            ps = new PrintStream(cs.getOutputStream());
-            clientsVector.add(this);
-            this.start();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
+    @Override
     public void run() {
-        while (true) {
+        while(true)
+        {
             try {
-                String msg = dis.readLine();
-                for (ChatHandler ch : clientsVector) {
-                    ch.ps.println(msg);
+                Socket clientSocket= server.accept();
+                new ClientHandler(clientSocket);
+            } catch (IOException ex) {
+                try {
+                    server.close();
+                } catch (IOException ex1) {
+                    Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex1);
                 }
-                
-                 String move = dis.readLine();
-                if (move == null) {
-                    break;
-                }
-                sendMessageToAll(msg);
-               
-                // Broadcast the move to all clients
-                
-            } catch (SocketException se) {
-
-                System.err.println("Connection reset by client");
-                break;
-            } catch (Exception ex) {
-                ex.printStackTrace();
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-        }
-        
-        
-    }
-    private void sendMessageToAll(String msg) {
-        for (ChatHandler client : clientsVector) {
-            client.ps.println(msg);
         }
     }
-   
+    
 
 }
