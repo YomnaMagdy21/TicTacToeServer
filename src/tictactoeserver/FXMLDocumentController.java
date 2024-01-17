@@ -8,6 +8,7 @@ package tictactoeserver;
 import static Database.DataAccessLayer.offlinePlayersNumber;
 import static Database.DataAccessLayer.onlinePlayersNumber;
 import java.io.IOException;
+import java.net.Socket;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -45,8 +46,11 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private PieChart pieChart;
+    //private Server server;
     private Server server;
     private Service<Void> stopService;
+        Socket clientSocket;
+
     
 //    @FXML
 //    private void handleButtonAction(ActionEvent event) {
@@ -75,12 +79,16 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void startServer(ActionEvent event){
-        if (server == null || !server.serverRunning()) {
+        if (server == null 
+//                || !server.serverRunning()
+                
+                ) {
             if (server == null) {
-                server = new Server();
+                server =  new Server();
             }
             new Thread(() -> {
-                server.startServer();
+                new Server();
+              //  server.startServer();
                 System.out.println("Server is Running Now");
                 txtServer.setText("Server is Running Now");
                 Platform.runLater(() -> startBtn.setText("Stop"));
@@ -88,7 +96,8 @@ public class FXMLDocumentController implements Initializable {
             }).start();
         } else {
             new Thread(() -> {
-                server.stopServer();
+                
+              //  server.stopServer();
                 Platform.runLater(() -> {
                     txtServer.setText("Server is Stopped Now");
                     startBtn.setText("Start");
