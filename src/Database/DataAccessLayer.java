@@ -141,11 +141,12 @@ public class DataAccessLayer {
                 // Process the result set
                 while (resultSet.next()) {
                     String username = resultSet.getString("username");
-                    String password = resultSet.getString("password");
+                    //String password = resultSet.getString("password");
                    // int score = resultSet.getInt("score");
-                    String status = resultSet.getString("status");
+                   // String status = resultSet.getString("status");
 
-                    String user = username+ password + status;
+                    String user = username;
+//                            + password + status;
                     onlineUsers.add(user);
                 }
             }
