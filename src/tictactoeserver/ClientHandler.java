@@ -37,7 +37,6 @@ public class ClientHandler extends Thread {
     private boolean serverRun = false;
     static Vector<ClientHandler> clients = new Vector<>();
     String userString;
-    
 
     public ClientHandler(Socket clientSocket) {
         try {
@@ -142,8 +141,8 @@ public class ClientHandler extends Thread {
                     System.out.println("LOGIN");
                     String successMessage = "login succeed";
                     outputStream.write(successMessage.getBytes());
-                   /// ClientHandler clientHandler = new ClientHandler(clientSocket);
-                  //  clientHandler.setUsername(enteredUsername);
+                    /// ClientHandler clientHandler = new ClientHandler(clientSocket);
+                    //  clientHandler.setUsername(enteredUsername);
                     for (ClientHandler client : clients) {
                         System.out.println("UserNAAAMe:::" + client.getUsername());
                     }
@@ -185,6 +184,7 @@ public class ClientHandler extends Thread {
                             String successMessageREQ = "userfound" + " " + enteredUsername + " " + "111";
                             client.outputStream.write(successMessageREQ.getBytes());
                             outputStream.flush();
+
                             System.out.println("reeeeeeeeeeeeqfor" + enteredUsername);
 
                             System.out.println("successMessageREQ");
@@ -204,7 +204,22 @@ public class ClientHandler extends Thread {
 //                    outputStream.flush();
 //                    System.out.println("REQ");
 //                    break;
+                case "accept":
+                    System.out.println("accccccept");
+                    for (ClientHandler client : clients) {
+                        if (client.getUsername().equalsIgnoreCase(enteredUsername)) {
+                            String successMessageREQ = "UserAccpeted" + " " + enteredUsername + " " + "111";
+                            client.outputStream.write(successMessageREQ.getBytes());
+                            outputStream.flush();
+                            System.out.println("UserAccpeted" + enteredUsername);
+                        }
+                              String successMessageREQ = "WaitingAccpeted" + " " + enteredUsername + " " + "111";
+                    client.outputStream.write(successMessageREQ.getBytes());
+                    outputStream.flush();
+                    }
+              
 
+                    break;
                 default:
                     System.out.println("Unknown command: " + command);
                     break;
