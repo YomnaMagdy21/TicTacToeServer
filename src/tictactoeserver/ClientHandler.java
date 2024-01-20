@@ -39,7 +39,6 @@ public class ClientHandler extends Thread {
     private boolean serverRun = false;
     static Vector<ClientHandler> clients = new Vector<>();
     String userString;
-    
 
     public ClientHandler(Socket clientSocket) {
         try {
@@ -138,23 +137,28 @@ public class ClientHandler extends Thread {
             switch (command) {
                 case "login":
                     //check if true 
-                    DataAccessLayer.isValidUser(enteredUsername, enteredPassword);
+                    if (DataAccessLayer.isValidUser(enteredUsername, enteredPassword)) {
 
-                    DataAccessLayer.updateStatusnewtoOnline(enteredUsername);
-                    System.out.println("LOGIN");
-                    String successMessage = "login succeed";
-                    outputStream.write(successMessage.getBytes());
-                   /// ClientHandler clientHandler = new ClientHandler(clientSocket);
-                  //  clientHandler.setUsername(enteredUsername);
-                    for (ClientHandler client : clients) {
-                        System.out.println("UserNAAAMe:::" + client.getUsername());
+                        DataAccessLayer.updateStatusnewtoOnline(enteredUsername);
+                        System.out.println("LOGIN");
+                        String successMessage = "login succeed";
+                        outputStream.write(successMessage.getBytes());
+                        /// ClientHandler clientHandler = new ClientHandler(clientSocket);
+                        //  clientHandler.setUsername(enteredUsername);
+                        for (ClientHandler client : clients) {
+                            System.out.println("UserNAAAMe:::" + client.getUsername());
+                        }
+                        ArrayList<String> onlinePlayers = DataAccessLayer.getOnlineUsers();
+                        String onlineUsersString = String.join(",", onlinePlayers);
+                        System.out.println(onlineUsersString);
+
+                        outputStream.write(onlineUsersString.getBytes());
+                        outputStream.flush();
+                    } else {
+                        String failureMessage = "login failed";
+                        outputStream.write(failureMessage.getBytes());
+                        outputStream.flush();
                     }
-                    ArrayList<String> onlinePlayers = DataAccessLayer.getOnlineUsers();
-                    String onlineUsersString = String.join(",", onlinePlayers);
-                    System.out.println(onlineUsersString);
-
-                    outputStream.write(onlineUsersString.getBytes());
-                    outputStream.flush();
                     break;
 
                 case "signup":
@@ -187,6 +191,7 @@ public class ClientHandler extends Thread {
                             String successMessageREQ = "userfound" + " " + enteredUsername + " " + "111";
                             client.outputStream.write(successMessageREQ.getBytes());
                             outputStream.flush();
+
                             System.out.println("reeeeeeeeeeeeqfor" + enteredUsername);
 
                             System.out.println("successMessageREQ");
@@ -206,6 +211,43 @@ public class ClientHandler extends Thread {
 //                    outputStream.flush();
 //                    System.out.println("REQ");
 //                    break;
+                case "accept":
+                    System.out.println("accccccept");
+                    for (ClientHandler client : clients) {
+//                        if (client.getUsername().equalsIgnoreCase(enteredUsername)) {
+//                            String successMessageREQ = "UserAccpeted" + " " + enteredUsername + " " + "111";
+//                            client.outputStream.write(successMessageREQ.getBytes());
+//                            outputStream.flush();
+//                            System.out.println("UserAccpeted" + enteredUsername);
+//                        }
+                        String successMessageREQ = "UserAccpeted" + " " + enteredUsername + " " + "111";
+                        client.outputStream.write(successMessageREQ.getBytes());
+                        outputStream.flush();
+                    }
+
+                    break;
+//                case "MOVE":
+//                    System.out.println("UserX");
+//                    for (ClientHandler client : clients) {
+//                        if (client.getUsername().equalsIgnoreCase(enteredUsername)) {
+//                            String successMessageREQ = "X" + " " + enteredUsername + " " + "111";
+//                            client.outputStream.write(successMessageREQ.getBytes());
+//                            outputStream.flush();
+//                            System.out.println("X" + enteredUsername);
+//                        }
+//                        String successMessageREQ = "X" + " " + enteredUsername + " " + "111";
+//                        client.outputStream.write(successMessageREQ.getBytes());
+//                        outputStream.flush();
+//                    }
+//
+//                    break;
+
+                case "MOVE":
+                    String buttonId = tokenizer.nextToken();
+                    String moveMessage = "MOVE " + this.getUsername() + " " + buttonId;
+                    // Send the move message to all clients
+                    sendToAllClients(moveMessage);
+                    break;
 
                 default:
                     System.out.println("Unknown command: " + command);
@@ -230,4 +272,17 @@ public class ClientHandler extends Thread {
     public String getUsername() {
         return userString;
     }
+
+    private void sendToAllClients(String message) {
+        for (ClientHandler client : clients) {
+            try {
+                client.outputStream.write(message.getBytes());
+                client.outputStream.flush();
+            } catch (IOException e) {
+                // Handle the exception appropriately
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
