@@ -66,8 +66,8 @@ public class FXMLDocumentController implements Initializable {
             int offlineNumber = offlinePlayersNumber();
             ObservableList<PieChart.Data> pChartData=
                     FXCollections.observableArrayList(
-                            new PieChart.Data("offline",offlineNumber),
-                            new PieChart.Data("online",onlineNumber));
+                            new PieChart.Data("offline "+offlineNumber,offlineNumber),
+                            new PieChart.Data("online "+onlineNumber,onlineNumber));
             pieChart.setData(pChartData);
             pieChart.setStartAngle(90); 
             System.out.println("onlineNumber : "+ onlineNumber);
