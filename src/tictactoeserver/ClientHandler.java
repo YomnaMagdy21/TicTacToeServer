@@ -213,11 +213,25 @@ public class ClientHandler extends Thread {
                             outputStream.flush();
                             System.out.println("UserAccpeted" + enteredUsername);
                         }
-                              String successMessageREQ = "WaitingAccpeted" + " " + enteredUsername + " " + "111";
-                    client.outputStream.write(successMessageREQ.getBytes());
-                    outputStream.flush();
+                        String successMessageREQ = "WaitingAccpeted" + " " + enteredUsername + " " + "111";
+                        client.outputStream.write(successMessageREQ.getBytes());
+                        outputStream.flush();
                     }
-              
+
+                    break;
+                case "MOVE":
+                    System.out.println("UserX");
+                    for (ClientHandler client : clients) {
+                        if (client.getUsername().equalsIgnoreCase(enteredUsername)) {
+                            String successMessageREQ = "X" + " " + enteredUsername + " " + "111";
+                            client.outputStream.write(successMessageREQ.getBytes());
+                            outputStream.flush();
+                            System.out.println("X" + enteredUsername);
+                        }
+                        String successMessageREQ = "X" + " " + enteredUsername + " " + "111";
+                        client.outputStream.write(successMessageREQ.getBytes());
+                        outputStream.flush();
+                    }
 
                     break;
                 default:
