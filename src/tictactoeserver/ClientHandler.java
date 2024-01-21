@@ -46,9 +46,8 @@ public class ClientHandler extends Thread {
             outputStream = clientSocket.getOutputStream();
             clients.add(this);
             System.out.println(clients);
-
             this.start();
-            // Initialize input and output streams
+           
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -56,7 +55,6 @@ public class ClientHandler extends Thread {
 
     @Override
     public void run() {
-//        startServer();
         handleClient(clientSocket);
     }
 
@@ -69,10 +67,7 @@ public class ClientHandler extends Thread {
                 System.out.println("Server is listening on port 5005");
                 while (serverRun) {
                     clientSocket = server.accept();
-                    //   new ClientHandler(clientSocket);
                     System.out.println("Server has accepted a new client");
-//                    InputStream inputStream = clientSocket.getInputStream();
-//                    OutputStream outputStream = clientSocket.getOutputStream();
                     handleClient(clientSocket);
 
                 }
@@ -141,8 +136,7 @@ public class ClientHandler extends Thread {
                         System.out.println("LOGIN");
                         String successMessage = "login succeed";
                         outputStream.write(successMessage.getBytes());
-                        /// ClientHandler clientHandler = new ClientHandler(clientSocket);
-                        //  clientHandler.setUsername(enteredUsername);
+
                         for (ClientHandler client : clients) {
                             System.out.println("UserNAAAMe:::" + client.getUsername());
                         }
@@ -195,73 +189,42 @@ public class ClientHandler extends Thread {
                             System.out.println("successMessageREQ");
 
                         }
-
-//                        String successMessageREQ = "req";
-//                        outputStream.write(successMessageREQ.getBytes());
-//                        outputStream.flush();
                     }
 
                     break;
-//                case "req":
-//                    System.out.println("REQ");
-//                    String successMessageREQ = "REQ succeed";
-//                    outputStream.write(successMessageREQ.getBytes());
-//                    outputStream.flush();
-//                    System.out.println("REQ");
-//                    break;
+
                 case "accept":
                     System.out.println("accccccept");
                     for (ClientHandler client : clients) {
-//                        if (client.getUsername().equalsIgnoreCase(enteredUsername)) {
-//                            String successMessageREQ = "UserAccpeted" + " " + enteredUsername + " " + "111";
-//                            client.outputStream.write(successMessageREQ.getBytes());
-//                            outputStream.flush();
-//                            System.out.println("UserAccpeted" + enteredUsername);
-//                        }
+
                         String successMessageREQ = "UserAccpeted" + " " + enteredUsername + " " + "111";
                         client.outputStream.write(successMessageREQ.getBytes());
                         outputStream.flush();
                     }
 
                     break;
-//                case "MOVE":
-//                    System.out.println("UserX");
-//                    for (ClientHandler client : clients) {
-//                        if (client.getUsername().equalsIgnoreCase(enteredUsername)) {
-//                            String successMessageREQ = "X" + " " + enteredUsername + " " + "111";
-//                            client.outputStream.write(successMessageREQ.getBytes());
-//                            outputStream.flush();
-//                            System.out.println("X" + enteredUsername);
-//                        }
-//                        String successMessageREQ = "X" + " " + enteredUsername + " " + "111";
-//                        client.outputStream.write(successMessageREQ.getBytes());
-//                        outputStream.flush();
-//                    }
-//
-//                    break;
+
+               
 
                 case "MOVE":
-                    String buttonId = tokenizer.nextToken();
-                    String moveMessage = "MOVE " + this.getUsername() + " " + buttonId;
-                    // Send the move message to all clients
-                    sendToAllClients(moveMessage);
-                    break;
+                    for (ClientHandler client : clients) {
+                        String moveMessage = "MOVE " + enteredUsername + " " + enteredPassword  ;
+                        client.outputStream.write(moveMessage.getBytes());
+                        outputStream.flush();
+                    }
 
                 default:
                     System.out.println("Unknown command: " + command);
                     break;
             }
         } catch (IOException ex) {
-//            Logger.getLogger(.class.getName()).log(Level.SEVERE, null, ex);
+               System.err.println(ex);
         } catch (SQLException ex) {
-//            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+               System.err.println(ex);
         }
     }
 
-// Add a method to send moves to a specific client
-    public void sendMove(String move) {
-        // Send move to the client
-    }
+
 
     public void setUsername(String username) {
         this.userString = username;
@@ -277,10 +240,10 @@ public class ClientHandler extends Thread {
                 client.outputStream.write(message.getBytes());
                 client.outputStream.flush();
             } catch (IOException e) {
-                // Handle the exception appropriately
                 e.printStackTrace();
             }
         }
     }
+
 
 }
