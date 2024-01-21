@@ -46,17 +46,10 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private PieChart pieChart;
-    //private Server server;
     private Server server;
-    private Service<Void> stopService;
-        Socket clientSocket;
+    Socket clientSocket;
 
     
-//    @FXML
-//    private void handleButtonAction(ActionEvent event) {
-//        System.out.println("You clicked me!");
-//        label.setText("Hello World!");
-//    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -79,25 +72,17 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void startServer(ActionEvent event){
-        if (server == null 
-//                || !server.serverRunning()
-                
-                ) {
-            if (server == null) {
-                server =  new Server();
-            }
+        if (server == null) {
             new Thread(() -> {
-                new Server();
-              //  server.startServer();
+                server = new Server();
                 System.out.println("Server is Running Now");
                 txtServer.setText("Server is Running Now");
                 Platform.runLater(() -> startBtn.setText("Stop"));
                 Platform.runLater(() -> startBtn.setStyle("-fx-background-color: red;"));
             }).start();
         } else {
-            new Thread(() -> {
-                
-              //  server.stopServer();
+            new Thread(() -> {                
+                server = null;
                 Platform.runLater(() -> {
                     txtServer.setText("Server is Stopped Now");
                     startBtn.setText("Start");
@@ -107,16 +92,6 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
-//    @FXML
-//    private void stopServer(ActionEvent event){
-//        if(server!=null && server.serverRunning()){
-//            server.stopServer();
-//            txtServer.setText("Server is Stopped Now");
-//        }else {
-//            txtServer.setText("Server is not running");
-//            System.out.println("server already not running");
-//        }
-//    }
     public Server getServer() {
         return server;
     }
