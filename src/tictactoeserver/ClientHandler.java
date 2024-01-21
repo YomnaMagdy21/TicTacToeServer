@@ -130,6 +130,8 @@ public class ClientHandler extends Thread {
             String command = tokenizer.nextToken();
             String enteredUsername = tokenizer.nextToken();
             String enteredPassword = tokenizer.nextToken();
+            String symol = tokenizer.nextToken();
+           
             this.userString = enteredUsername;
 
             switch (command) {
@@ -241,24 +243,35 @@ public class ClientHandler extends Thread {
 //                    break;
 
                 case "MOVE":
-                    String buttonId = tokenizer.nextToken();
-                    String moveMessage = "MOVE " + this.getUsername() + " " + buttonId;
-                    // Send the move message to all clients
-                    sendToAllClients(moveMessage);
-                    break;
+                 System.out.println("this is symbol "+symol);
+                    for (ClientHandler client : clients) {
+                       
+                        if (client.getUsername().equalsIgnoreCase(enteredUsername)) {
+                                String moveMessage = "MOVETO" + " " + enteredUsername + " " + enteredPassword + " " + symol;
+                            client.outputStream.write(moveMessage.getBytes());
+                            outputStream.flush();
 
-                default:
+                            System.out.println("MOVETO" +" "+ enteredUsername);
+
+                          //  System.out.println("MoveBY");
+
+                        }
+                    
+                    }
+                        break;
+                    
+                    
+            default:
                     System.out.println("Unknown command: " + command);
                     break;
             }
         } catch (IOException ex) {
 //            Logger.getLogger(.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        }catch (SQLException ex) {
 //            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-// Add a method to send moves to a specific client
+        }
+        // Add a method to send moves to a specific client
     public void sendMove(String move) {
         // Send move to the client
     }
