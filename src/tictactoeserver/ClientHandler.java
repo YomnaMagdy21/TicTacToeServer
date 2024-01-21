@@ -55,7 +55,6 @@ public class ClientHandler extends Thread {
 
     @Override
     public void run() {
-//        startServer();
         handleClient(clientSocket);
     }
 
@@ -68,10 +67,7 @@ public class ClientHandler extends Thread {
                 System.out.println("Server is listening on port 5005");
                 while (serverRun) {
                     clientSocket = server.accept();
-                    //   new ClientHandler(clientSocket);
                     System.out.println("Server has accepted a new client");
-//                    InputStream inputStream = clientSocket.getInputStream();
-//                    OutputStream outputStream = clientSocket.getOutputStream();
                     handleClient(clientSocket);
 
                 }
@@ -140,8 +136,6 @@ public class ClientHandler extends Thread {
                         System.out.println("LOGIN");
                         String successMessage = "login succeed";
                         outputStream.write(successMessage.getBytes());
-                        /// ClientHandler clientHandler = new ClientHandler(clientSocket);
-                        //  clientHandler.setUsername(enteredUsername);
                         for (ClientHandler client : clients) {
                             System.out.println("UserNAAAMe:::" + client.getUsername());
                         }
