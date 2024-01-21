@@ -38,11 +38,6 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button startBtn;
 
-    @FXML
-    private Button stopBtn;
-    
-    @FXML
-    private Label label;
     
     @FXML
     private PieChart pieChart;
