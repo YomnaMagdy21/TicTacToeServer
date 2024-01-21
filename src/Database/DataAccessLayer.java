@@ -87,7 +87,7 @@ public class DataAccessLayer {
     public static int updateStatusnewtoOffline(String username) throws SQLException {
         int result;
         DriverManager.registerDriver(new ClientDriver());
-        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "habiba", "habiba");
+        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "root", "root");
         PreparedStatement prepareStatement = connection.prepareStatement("UPDATE Player SET STATUS='offline' WHERE USERNAME=?");
         prepareStatement.setString(1, username);
         result = prepareStatement.executeUpdate();
@@ -127,8 +127,8 @@ public class DataAccessLayer {
         }
     }
 
-    public static ArrayList<DTO> getOnlineUsers() throws SQLException {
-        ArrayList<DTO> onlineUsers = new ArrayList<>();
+    public static ArrayList<String> getOnlineUsers() throws SQLException {
+        ArrayList onlineUsers = new ArrayList<>();
 
         // Establish a database connection
         try (
@@ -141,11 +141,12 @@ public class DataAccessLayer {
                 // Process the result set
                 while (resultSet.next()) {
                     String username = resultSet.getString("username");
-                    String password = resultSet.getString("password");
-                    int score = resultSet.getInt("score");
-                    String status = resultSet.getString("status");
+                    //String password = resultSet.getString("password");
+                   // int score = resultSet.getInt("score");
+                   // String status = resultSet.getString("status");
 
-                    DTO user = new DTO(username, password, score, status);
+                    String user = username;
+//                            + password + status;
                     onlineUsers.add(user);
                 }
             }
@@ -157,6 +158,14 @@ public class DataAccessLayer {
 
         return onlineUsers;
     }
+    
+    
+    
+    
+
+    
+    
+    
 
     public List<DTO> getAll() {
         List<DTO> players = new ArrayList<DTO>();
