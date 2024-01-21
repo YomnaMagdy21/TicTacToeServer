@@ -136,6 +136,7 @@ public class ClientHandler extends Thread {
                         System.out.println("LOGIN");
                         String successMessage = "login succeed";
                         outputStream.write(successMessage.getBytes());
+
                         for (ClientHandler client : clients) {
                             System.out.println("UserNAAAMe:::" + client.getUsername());
                         }
@@ -195,12 +196,14 @@ public class ClientHandler extends Thread {
                 case "accept":
                     System.out.println("accccccept");
                     for (ClientHandler client : clients) {
+
                         String successMessageREQ = "UserAccpeted" + " " + enteredUsername + " " + "111";
                         client.outputStream.write(successMessageREQ.getBytes());
                         outputStream.flush();
                     }
 
                     break;
+
                
 
                 case "MOVE":
@@ -209,7 +212,6 @@ public class ClientHandler extends Thread {
                         client.outputStream.write(moveMessage.getBytes());
                         outputStream.flush();
                     }
-                    break;
 
                 default:
                     System.out.println("Unknown command: " + command);
