@@ -233,6 +233,7 @@ public class ClientHandler extends Thread {
             }
         } catch (IOException ex) {
 //            Logger.getLogger(.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
         } catch (SQLException ex) {
 //            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
