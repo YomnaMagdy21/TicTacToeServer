@@ -131,20 +131,17 @@ public class ClientHandler extends Thread {
             String enteredUsername = tokenizer.nextToken();
             String enteredPassword = tokenizer.nextToken();
             String symol = tokenizer.nextToken();
-           
+
             this.userString = enteredUsername;
 
             switch (command) {
                 case "login":
-                    //check if true 
                     if (DataAccessLayer.isValidUser(enteredUsername, enteredPassword)) {
 
                         DataAccessLayer.updateStatusnewtoOnline(enteredUsername);
                         System.out.println("LOGIN");
                         String successMessage = "login succeed";
                         outputStream.write(successMessage.getBytes());
-                        /// ClientHandler clientHandler = new ClientHandler(clientSocket);
-                        //  clientHandler.setUsername(enteredUsername);
                         for (ClientHandler client : clients) {
                             System.out.println("UserNAAAMe:::" + client.getUsername());
                         }
@@ -170,11 +167,13 @@ public class ClientHandler extends Thread {
                     break;
 
                 case "LOGOUT":
-                    DataAccessLayer.updateStatusnewtoOffline(enteredUsername);
                     System.out.println("LOGOUT");
+
+                    DataAccessLayer.updateStatusnewtoOffline(enteredUsername);
                     String successMessageLOGOUT = "LOGOUT succeed";
                     outputStream.write(successMessageLOGOUT.getBytes());
                     outputStream.flush();
+                    System.out.println("LOGOUT");
                     System.out.println("LOGOUT");
                     break;
                 case "invite":
@@ -197,20 +196,9 @@ public class ClientHandler extends Thread {
                             System.out.println("successMessageREQ");
 
                         }
-
-//                        String successMessageREQ = "req";
-//                        outputStream.write(successMessageREQ.getBytes());
-//                        outputStream.flush();
                     }
 
                     break;
-//                case "req":
-//                    System.out.println("REQ");
-//                    String successMessageREQ = "REQ succeed";
-//                    outputStream.write(successMessageREQ.getBytes());
-//                    outputStream.flush();
-//                    System.out.println("REQ");
-//                    break;
                 case "accept":
                     System.out.println("accccccept");
                     for (ClientHandler client : clients) {
@@ -226,54 +214,40 @@ public class ClientHandler extends Thread {
                     }
 
                     break;
-//                case "MOVE":
-//                    System.out.println("UserX");
-//                    for (ClientHandler client : clients) {
-//                        if (client.getUsername().equalsIgnoreCase(enteredUsername)) {
-//                            String successMessageREQ = "X" + " " + enteredUsername + " " + "111";
-//                            client.outputStream.write(successMessageREQ.getBytes());
-//                            outputStream.flush();
-//                            System.out.println("X" + enteredUsername);
-//                        }
-//                        String successMessageREQ = "X" + " " + enteredUsername + " " + "111";
-//                        client.outputStream.write(successMessageREQ.getBytes());
-//                        outputStream.flush();
-//                    }
-//
-//                    break;
-
-                case "MOVE":
-                 System.out.println("this is symbol "+symol);
+                case "MOVEX":
+                    System.out.println("this is symbol X " + "  " + symol);
                     for (ClientHandler client : clients) {
-                       
                         if (client.getUsername().equalsIgnoreCase(enteredUsername)) {
-                                String moveMessage = "MOVETO" + " " + enteredUsername + " " + enteredPassword + " " + symol;
+                            String moveMessage = "MOVEXTO" + " " + enteredUsername + " " + enteredPassword + " " + symol;
                             client.outputStream.write(moveMessage.getBytes());
                             outputStream.flush();
-
-                            System.out.println("MOVETO" +" "+ enteredUsername);
-
-                          //  System.out.println("MoveBY");
-
+                            System.out.println("MOVEXTO" + " " + enteredUsername);
                         }
-                    
                     }
-                        break;
-                    
-                    
-            default:
+
+                    break;
+                case "MOVEO":
+                    System.out.println("this is symbol O" + "  " + symol);
+                    for (ClientHandler client : clients) {
+                        if (client.getUsername().equalsIgnoreCase(enteredUsername)) {
+                            String moveMessage = "MOVEOTO" + " " + enteredUsername + " " + enteredPassword + " " + symol;
+                            client.outputStream.write(moveMessage.getBytes());
+                            outputStream.flush();
+                            System.out.println("MOVEOTO" + " " + enteredUsername);
+                        }
+                    }
+
+                    break;
+
+                default:
                     System.out.println("Unknown command: " + command);
                     break;
             }
         } catch (IOException ex) {
 //            Logger.getLogger(.class.getName()).log(Level.SEVERE, null, ex);
-        }catch (SQLException ex) {
+        } catch (SQLException ex) {
 //            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
-        }
-        // Add a method to send moves to a specific client
-    public void sendMove(String move) {
-        // Send move to the client
     }
 
     public void setUsername(String username) {
@@ -282,18 +256,6 @@ public class ClientHandler extends Thread {
 
     public String getUsername() {
         return userString;
-    }
-
-    private void sendToAllClients(String message) {
-        for (ClientHandler client : clients) {
-            try {
-                client.outputStream.write(message.getBytes());
-                client.outputStream.flush();
-            } catch (IOException e) {
-                // Handle the exception appropriately
-                e.printStackTrace();
-            }
-        }
     }
 
 }
