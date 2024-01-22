@@ -96,13 +96,13 @@ public class DataAccessLayer {
         return result;
     }
 
-    public static int updateScore(String username, int score) throws SQLException {
+    public static int updateScore(DTO player) throws SQLException {
         int result = 0;
         DriverManager.registerDriver(new ClientDriver());
         Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "root", "root");
         PreparedStatement ps = con.prepareStatement("UPDATE Player SET Score = ? WHERE Username = ?");
-        ps.setInt(1, score);
-        ps.setString(2, username);
+        ps.setInt(1, player.getScore());
+        ps.setString(2, player.getUsername());
         result = ps.executeUpdate();
         ps.close();
         con.close();
