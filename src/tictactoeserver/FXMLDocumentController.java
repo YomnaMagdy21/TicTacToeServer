@@ -79,16 +79,13 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void startServer(ActionEvent event){
-        if (server == null 
-//                || !server.serverRunning()
-                
-                ) {
+        if (server == null || !server.serverRunning()) {
             if (server == null) {
                 server =  new Server();
             }
             new Thread(() -> {
                 new Server();
-              //  server.startServer();
+                server.startServer();
                 System.out.println("Server is Running Now");
                 txtServer.setText("Server is Running Now");
                 Platform.runLater(() -> startBtn.setText("Stop"));
@@ -97,7 +94,7 @@ public class FXMLDocumentController implements Initializable {
         } else {
             new Thread(() -> {
                 
-              //  server.stopServer();
+                server.stopServer();
                 Platform.runLater(() -> {
                     txtServer.setText("Server is Stopped Now");
                     startBtn.setText("Start");

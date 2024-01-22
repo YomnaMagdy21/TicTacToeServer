@@ -38,16 +38,12 @@ public class Server extends Thread {
 
     private boolean serverRun = false;
 
-    public Server(){
-        try {
-            server = new ServerSocket(5005);
-            start();
-            System.out.println("Server is listening on port 5005");
-            
-        } catch (IOException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+//    public Server(){
+//       server = new ServerSocket(5005);
+//       start();
+//       System.out.println("Server is listening on port 5005");
+//            
+//    }
     
 //    public void Server() {
 //
@@ -58,8 +54,8 @@ public class Server extends Thread {
 //            while (serverRun) {
 //                clientSocket = server.accept();
 //            //    new ClientHandler(clientSocket);
-////                ClientHandler C= new ClientHandler(clientSocket);
-////               C.handleClient(clientSocket);
+//                ClientHandler C= new ClientHandler(clientSocket);
+//               C.handleClient(clientSocket);
 //
 //                this.start();
 //
@@ -70,77 +66,78 @@ public class Server extends Thread {
 //        }
 //    }
 
-//    public void startServer() {
-//        new Thread(() -> {
-//            try {
-//                server = new ServerSocket(5005);
-//                serverRun = true;
-//                System.out.println("Server is listening on port 5005");
-//                while (serverRun) {
-//                    clientSocket = server.accept();
-//                  //  new ClientHandler(clientSocket);
-//                    ClientHandler C = new ClientHandler(clientSocket);
-//                    C.handleClient(clientSocket);
-//
-//                    System.out.println("Server has accepted a new client");
-////                    InputStream inputStream = clientSocket.getInputStream();
-////                    OutputStream outputStream = clientSocket.getOutputStream();
-//                    // ClientHandler.handleClient(clientSocket);
-//                }
-//            } catch (IOException ex) {
-//                ex.printStackTrace();
-//            } finally {
-//                try {
-//                    if (server != null && !server.isClosed()) {
-//                        server.close();
-//                    }
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                serverRun = false;
-//                System.out.println("Server Stopped now !!");
-//
-//            }
-//
-//        }).start();
-//    }
-//
-//    public void stopServer() {
-//        try {
-//            if (server != null && !server.isClosed()) {
-//                server.close();
-//                serverRun = false;
-//                System.out.println("Server Stopped now !!");
-//            }
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//            System.out.println("thers is a problem on server");
-//
-//        }
-//
-//    }
-//
-//    public boolean serverRunning() {
-//        return serverRun;
-//    }
-
-    @Override
-    public void run() {
-        while(true)
-        {
+    public void startServer() {
+        new Thread(() -> {
             try {
-                Socket clientSocket= server.accept();
-                new ClientHandler(clientSocket);
-            } catch (IOException ex) {
-                try {
-                    server.close();
-                } catch (IOException ex1) {
-                    Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex1);
+                new Server();
+                server = new ServerSocket(5005);
+                serverRun = true;
+                System.out.println("Server is listening on port 5005");
+                while (serverRun) {
+                    clientSocket = server.accept();
+                  //  new ClientHandler(clientSocket);
+                    ClientHandler C = new ClientHandler(clientSocket);
+                    C.handleClient(clientSocket);
+
+                    System.out.println("Server has accepted a new client");
+//                    InputStream inputStream = clientSocket.getInputStream();
+//                    OutputStream outputStream = clientSocket.getOutputStream();
+                    // ClientHandler.handleClient(clientSocket);
                 }
-                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                System.out.println("Connection Closed 111");
+            } finally {
+                try {
+                    if (server != null && !server.isClosed()) {
+                        server.close();
+                    }
+                } catch (IOException e) {
+                    System.out.println("Connection Closed 222");
+                }
+                serverRun = false;
+                System.out.println("Server Stopped now !!");
+
             }
-        }
+
+        }).start();
     }
+
+    public void stopServer() {
+        try {
+            if (server != null && !server.isClosed()) {
+                server.close();
+                serverRun = false;
+                System.out.println("Server Stopped now !!");
+            }
+        } catch (IOException ex) {
+            //ex.printStackTrace();
+            System.out.println("thers is a problem on server");
+
+        }
+
+    }
+
+    public boolean serverRunning() {
+        return serverRun;
+    }
+
+//    @Override
+//    public void run() {
+//        while(true)
+//        {
+//            try {
+//                Socket clientSocket= server.accept();
+//                new ClientHandler(clientSocket);
+//            } catch (IOException ex) {
+//                try {
+//                    server.close();
+//                } catch (IOException ex1) {
+//                    System.out.println("Connection Closed 333");
+//                }
+//                System.out.println("Connection Closed 444");
+//            }
+//        }
+//    }
     
 
 }

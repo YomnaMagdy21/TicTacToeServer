@@ -114,6 +114,20 @@ public class ClientHandler extends Thread {
         return serverRun;
     }
 
+//    private void sendMoveToOpponent(String senderUsername, String move) {
+//        for (ClientHandler client : clients) {
+//            if (!client.getUsername().equalsIgnoreCase(senderUsername)) {
+//                try {
+//                    String moveMessage = "move"+" "+ move +" "+ "123";
+//                    client.outputStream.write(moveMessage.getBytes());
+//                    client.outputStream.flush();
+//                } catch (IOException ex) {
+//                    Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//        }
+//    }
+//    
     public void handleClient(Socket clientSocket) {
 
         try {
@@ -188,7 +202,7 @@ public class ClientHandler extends Thread {
                             System.out.println("reeeeeeeeeeeeqfor" + enteredUsername);
 
                             System.out.println("successMessageREQ");
-
+                            break;
                         }
 
 //                        String successMessageREQ = "req";
@@ -197,6 +211,14 @@ public class ClientHandler extends Thread {
                     }
 
                     break;
+//                    case "move":
+//                        // Handle the move received from the client
+//                        //String move = tokenizer.nextToken();
+//                        sendMoveToOpponent(enteredUsername, enteredUsername);
+//                        break;
+//                    case "accept":
+//                        handleInvitationAcceptance(enteredUsername, tokenizer.nextToken());
+//                        break;
 //                case "req":
 //                    System.out.println("REQ");
 //                    String successMessageREQ = "REQ succeed";
@@ -215,6 +237,25 @@ public class ClientHandler extends Thread {
 //            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+//    private void handleInvitationAcceptance(String acceptedUsername, String senderUsername) {
+//        // Send a notification to the sender about the acceptance
+//        notifySender(senderUsername, acceptedUsername);
+//    }
+
+//    private void notifySender(String senderUsername, String acceptedUsername) {
+//        for (ClientHandler client : clients) {
+//            if (client.getUsername().equalsIgnoreCase(senderUsername)) {
+//                try {
+//                    String notificationMessage = "accept"+" "+ acceptedUsername+" "+"123";
+//                    client.outputStream.write(notificationMessage.getBytes());
+//                    client.outputStream.flush();
+//                } catch (IOException ex) {
+//                    Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//                break;
+//            }
+//        }
+//    }
 
 // Add a method to send moves to a specific client
     public void sendMove(String move) {
