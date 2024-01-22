@@ -47,7 +47,7 @@ public class ClientHandler extends Thread {
             clients.add(this);
             System.out.println(clients);
             this.start();
-           
+
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -125,18 +125,18 @@ public class ClientHandler extends Thread {
             String command = tokenizer.nextToken();
             String enteredUsername = tokenizer.nextToken();
             String enteredPassword = tokenizer.nextToken();
+            String symol = tokenizer.nextToken();
+
             this.userString = enteredUsername;
 
             switch (command) {
                 case "login":
-                    //check if true 
                     if (DataAccessLayer.isValidUser(enteredUsername, enteredPassword)) {
 
                         DataAccessLayer.updateStatusnewtoOnline(enteredUsername);
                         System.out.println("LOGIN");
                         String successMessage = "login succeed";
                         outputStream.write(successMessage.getBytes());
-
                         for (ClientHandler client : clients) {
                             System.out.println("UserNAAAMe:::" + client.getUsername());
                         }
@@ -162,11 +162,13 @@ public class ClientHandler extends Thread {
                     break;
 
                 case "LOGOUT":
-                    DataAccessLayer.updateStatusnewtoOffline(enteredUsername);
                     System.out.println("LOGOUT");
+
+                    DataAccessLayer.updateStatusnewtoOffline(enteredUsername);
                     String successMessageLOGOUT = "LOGOUT succeed";
                     outputStream.write(successMessageLOGOUT.getBytes());
                     outputStream.flush();
+                    System.out.println("LOGOUT");
                     System.out.println("LOGOUT");
                     break;
                 case "invite":
@@ -204,11 +206,34 @@ public class ClientHandler extends Thread {
 
                     break;
 
-               
+                case "MOVEX":
+                    System.out.println("this is symbol X " + "  " + symol);
+                    for (ClientHandler client : clients) {
+                        if (client.getUsername().equalsIgnoreCase(enteredUsername)) {
+                            String moveMessage = "MOVEXTO" + " " + enteredUsername + " " + enteredPassword + " " + symol;
+                            client.outputStream.write(moveMessage.getBytes());
+                            outputStream.flush();
+                            System.out.println("MOVEXTO" + " " + enteredUsername);
+                        }
+                    }
+
+                    break;
+                case "MOVEO":
+                    System.out.println("this is symbol O" + "  " + symol);
+                    for (ClientHandler client : clients) {
+                        if (client.getUsername().equalsIgnoreCase(enteredUsername)) {
+                            String moveMessage = "MOVEOTO" + " " + enteredUsername + " " + enteredPassword + " " + symol;
+                            client.outputStream.write(moveMessage.getBytes());
+                            outputStream.flush();
+                            System.out.println("MOVEOTO" + " " + enteredUsername);
+                        }
+                    }
+
+                    break;
 
                 case "MOVE":
                     for (ClientHandler client : clients) {
-                        String moveMessage = "MOVE " + enteredUsername + " " + enteredPassword  ;
+                        String moveMessage = "MOVE " + enteredUsername + " " + enteredPassword;
                         client.outputStream.write(moveMessage.getBytes());
                         outputStream.flush();
                     }
@@ -218,13 +243,11 @@ public class ClientHandler extends Thread {
                     break;
             }
         } catch (IOException ex) {
-               System.err.println(ex);
+            System.err.println(ex);
         } catch (SQLException ex) {
-               System.err.println(ex);
+            System.err.println(ex);
         }
     }
-
-
 
     public void setUsername(String username) {
         this.userString = username;
@@ -244,6 +267,5 @@ public class ClientHandler extends Thread {
             }
         }
     }
-
 
 }
