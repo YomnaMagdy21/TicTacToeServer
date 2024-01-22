@@ -73,7 +73,7 @@ public class FXMLDocumentController implements Initializable {
             System.out.println("onlineNumber : "+ onlineNumber);
             System.out.println("offlineNumber : "+ offlineNumber);
         } catch (SQLException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     } 
     
