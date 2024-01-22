@@ -130,23 +130,19 @@ public class DataAccessLayer {
     public static ArrayList<String> getOnlineUsers() throws SQLException {
         ArrayList onlineUsers = new ArrayList<>();
 
-        // Establish a database connection
+        
         try (
+
                 Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/TicTacToe", "habiba", "habiba");) {
             // Execute SQL query to get online users
+
             String sql = "SELECT * FROM PLAYER WHERE STATUS = 'online'";
             try (PreparedStatement statement = connection.prepareStatement(sql);
                     ResultSet resultSet = statement.executeQuery()) {
-
-                // Process the result set
                 while (resultSet.next()) {
                     String username = resultSet.getString("username");
-                    //String password = resultSet.getString("password");
-                   // int score = resultSet.getInt("score");
-                   // String status = resultSet.getString("status");
-
+                  
                     String user = username;
-//                            + password + status;
                     onlineUsers.add(user);
                 }
             }
