@@ -51,7 +51,7 @@ public class ClientHandler extends Thread {
             this.start();
             // Initialize input and output streams
         } catch (IOException ex) {
-            Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 

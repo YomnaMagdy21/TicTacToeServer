@@ -246,8 +246,8 @@ public class DataAccessLayer {
         return exit;
     }
 
-    public static void main(String[] args) {
-
-    }
+//    public static void main(String[] args) {
+//
+//    }
 
 }
